@@ -10,10 +10,6 @@
          <!-- FORMULAIRE DE CONNEXION -->
     <div class="card">
         <h2>Login Form</h2>
-
-        <% if(error.length > 0){%>
-         <div p class="error" > <p><%= error %></p> </div>
-        <%}%>
             <!-- FORMULAIRE -->
         <form action="/login" class="form" method="post">
             <input type="text" name="username" placeholder="username" class="email">
