@@ -36,6 +36,10 @@ router.post('/', function(req, res, next) {
 });
 
 
+router.get('/login', function(req, res, next) {
+  res.render('login' , {error : req.flash('error')});
+});
+
 router.post('/login', 
   passport.authenticate('local', { 
     
