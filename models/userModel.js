@@ -1,5 +1,5 @@
 const mongoose  = require('mongoose');
-//const plm  = require('passport-local-mongoose');
+const plm  = require('passport-local-mongoose');
 
 //usermane: prakashv124421
 //password: myQg3sisrpw6Grkv
@@ -14,6 +14,6 @@ const userSchema = new schema({
 });
 
 
-//userSchema.plugin(plm);
+userSchema.plugin(plm);
 
 module.exports = mongoose.model('users', userSchema);

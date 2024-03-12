@@ -6,24 +6,48 @@ var logger = require('morgan');
 
 const expressSession = require('express-session');
 const flash = require('connect-flash');
+const MongoStore = require('connect-mongo');
+
+const passport  = require('passport');
+
 
 //var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const userModel = require('./models/userModel');
 
 var app = express();
+
+const store = MongoStore.create({
+  mongoUrl: 'mongodb+srv://prakashv124421:myQg3sisrpw6Grkv@cluster0.hfqi2tc.mongodb.net/',
+  touchAfter: 24 * 3600 ,
+  crypto: {
+    secret: 'hello world'
+  }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //---------------------------------------------------------------------------------
+
+app.use(flash());
+
 app.use(expressSession({
+  store,
   secret: 'hello world',
   resave: false,
   saveUninitialized: false,
 }));
 
-app.use(flash());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(userModel.serializeUser());
+passport.deserializeUser(userModel.deserializeUser());
+
+
 //---------------------------------------------------------------------------------
 app.use(logger('dev'));
 app.use(express.json());
