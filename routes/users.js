@@ -14,31 +14,27 @@ router.get('/profile',checkAuthentication, function(req, res, next) {
 
 
 router.get('/', function(req, res, next) {
-  res.render('signup');
+  res.render('signup' , {error : req.flash('error')});
 });
 
 
 router.post('/', function(req, res, next) {
 
-  const newUser = new userModel({
-  email : req.body.email,
-  username : req.body.username  });
-
-  userModel.register( newUser , req.body.password ).then(()=>{
-
-    const auth = userModel.authenticate()(req,res,()=>{res.redirect('/profile')});
-
+  console.log(req.body);
+  const newuser = new userModel({
+    username : req.body.username,
+    email : req.body.email
   });
 
-  
+  const regUser = userModel.register( newuser, req.body.password );
+  regUser.then(()=>{passport.authenticate('local')(req,res,()=>{res.redirect('/profile')})})
+  .catch((err)=>{
+    req.flash('error', 'user already exist' );
+    res.redirect('/');
+  });
 
 });
 
-router.get('/login', function(req, res, next) {
-  
-  res.render('login', {error : req.flash('error')});
-  
-});
 
 router.post('/login', 
   passport.authenticate('local', { 
